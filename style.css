@@ -1,0 +1,664 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Poppins', sans-serif;
+}
+h1{
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+h2{
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+h3{
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+h4{
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+h5{
+    font-size: 1rem;
+    font-weight: 400;
+    color: darkslategray;
+}
+h6{
+    color: aliceblue;
+}
+
+button {
+    font-size: 0.8rem;
+    font-weight: 700;
+    outline: none;
+    border: none;
+    background-color: grey;
+    color: blue; /* Change text color to blue */
+    padding: 13px 30px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+}
+
+button a {
+    color: darkslategrey; /* Ensure link inside button inherits the button's color */
+    text-decoration: none; /* Remove underline from link */
+}
+
+button:hover {
+    background-color: coral;
+}
+
+hr{
+    width: 30px;
+    height: 2px;
+    background-color:coral;
+}
+.star{
+    padding: 10px 0;
+}
+.star i{
+    font-size: 0.8rem;
+    color: goldenrod;
+}
+.navbar{
+    font-size: 16px;
+    top: 0;
+    left: 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1rem;
+}
+.navbar-light .navbar-nav .nav-link{
+padding: 0 20px ;
+color: black;
+transition: 0.3s ease;
+}
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar i:hover,
+.navbar-light .navbar-nav .nav-link.active,
+.navbar i.active{
+    color: black;
+}
+/* Ensure that the search container is flex and aligns items */
+.nav-item {
+    display: flex;
+    align-items: center;
+}
+
+.search-container {
+    margin-left: 10px;
+}
+.product {
+    transition: opacity 0.3s ease;
+}
+
+
+#searchInput {
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.product {
+    display: block; /* Ensure products are displayed as blocks */
+}
+
+.product.hidden {
+    display: none; /* Hide products that don't match the search */
+}
+/* Show the search input on larger screens */
+@media (min-width: 992px) {
+    .search-container {
+        display: block;
+    }
+}
+
+/* Adjust styling for the search input on smaller screens */
+@media (max-width: 991px) {
+    #searchInput {
+        width: 150px; /* Adjust width for smaller screens */
+    }
+}
+
+/* Optional: Add styles for search input focus */
+#searchInput:focus {
+    border-color: coral; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+.navbar i{
+    font-size: 1.2rem;
+    padding: 0 7px ;
+    cursor: pointer;
+}
+#bar{
+    font-size: 1.5rem;
+    padding: 7px;
+    cursor: pointer;
+
+    transition: 0.3s ease;
+    color: white;
+}
+#bar:hover,
+#bar.active{
+    color:wheat ;
+}
+/*Mobile Nav*/
+.navbar-light .navbar-toggler{
+    border: none;
+    outline: none;
+}
+@media only screen and (max-width: 991px){
+    body> nav > div > button:hover,
+    body>nav>div>button:focus{
+        background-color: grey;
+
+    }
+    body> nav > div > button:hover #bar,
+    body>nav>div>button:focus #bar{
+        background-color: grey;
+    }
+    #navbarSupportedContent > ul{
+        margin:1rem;
+        justify-content: flex-end;
+        align-items: flex-end;
+        text-align: right;
+    }
+    #navbarSupportedContent>ul>li:nth-child(n)>a{
+        padding: 10px 0;
+    }
+}
+/* Navbar Styling */
+.navbar {
+    z-index: 1000; /* Ensure the navbar is on top of other content */
+}
+
+/* Home Section Styling */
+#home {
+    background-image: url("bc12.jpg");
+    background-size: cover; /* Cover the entire section */
+    background-position: center center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent image repetition */
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Aligns content to the left */
+    color: darkolivegreen; /* Text color */
+    text-align: left; /* Aligns text to the left */
+    padding: 80px 20px 20px; /* Adds padding, adjust top padding to make room for the navbar */
+    box-sizing: border-box; /* Includes padding in the element's total width and height */
+    overflow: hidden; /* Hides any overflowed content */
+    position: relative; /* Ensure positioning context for ::before */
+}
+
+#home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%; /* Adjust height as needed */
+    background-size: cover; /* Cover the entire section */
+    background-position: center top;
+    background-repeat: no-repeat;
+    z-index: -1; /* Ensure it is behind the content */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #home {
+        padding-top: 60px; /* Adjust top padding for smaller screens if needed */
+    }
+}
+
+
+#home span{
+    color: black}
+.navbar-nav {
+    text-align: center;
+}
+
+.nav-item {
+    margin: 0.5rem 0;
+}
+
+.navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar-toggler:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    padding: 10px 15px;
+    color: black;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: coral;
+}
+.container{
+    padding: 20px;
+}
+.row{
+    display: flex;
+    justify-content: space-between;
+}
+.col-lg-4{flex: 1;
+    margin: 0 10px; /* Add spacing between columns */}
+
+.col-lg-4 img {
+        width: 100%;
+        height: 300px; /* Set a fixed height for all images */
+        object-fit: cover; /* Ensure the image covers the allocated space without distorting */
+        border-radius: 10px; /* Optional: Add rounded corners */
+    }
+.navbar-collapse {
+    background-color: darkolivegreen;
+}#new .one {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    height: 400px;
+}
+
+#new .one img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+#new .details {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.6); /* Dark background with opacity */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    transition: 0.3s ease;
+}
+
+#new .one:hover .details {
+    cursor: pointer;
+    background-color: rgba(245, 178, 178, 0.7);
+}
+
+#new .details h2 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+#new .details button {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: darkolivegreen;
+    background: none;
+    text-transform: uppercase;
+    border: 1px solid black;
+    padding: 10px 20px;
+    margin-top: 10px;
+    transition: 0.3s ease;
+}
+.custom-color {
+    color: black;
+}
+
+#new .details button:hover {
+    color: aliceblue;
+    border-color: white;
+}
+/*Products*/
+.product {
+    cursor: pointer;
+    margin-bottom: 2rem;
+}
+
+.product img {
+    width: 100%; /* Ensure full width */
+    height: auto; /* Let height be dynamic */
+    min-height: 350px; /* Set a minimum height */
+    object-fit: cover; /* Cover the container properly */
+}
+
+.product:hover img {
+    opacity: 0.7;
+}
+
+.product .buy-btn {
+    background: chocolate;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: 0.3s all;
+    display: inline-block;
+    margin-top: 10px; /* Adjust spacing from price */
+}
+
+.product:hover .buy-btn {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Copyright Section */
+.copyright img {
+    margin-right: 15px; /* Adjust the spacing between the image and the text */
+}
+
+.copyright p {
+    margin-bottom: 0; /* Ensure there's no extra space below the text */
+}
+
+.copyright .fa-brands {
+    font-size: 20px; /* Adjust icon size */
+    color: white; /* Bootstrap primary color or any other color */
+}
+
+.copyright .fa-brands:hover {
+    color: grey; /* Darker shade on hover */
+}
+
+#banner{
+    background-image: url("ban.jpg");
+    width: 100%;
+    height:60vh;
+    background-size: cover;
+    background-position: top  70px center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+}
+#banner h4{
+    color: aliceblue;
+}
+#banner h1{
+    color: antiquewhite;
+}
+#banner button{
+    background-color: coral;
+}
+#banner1{
+    background-image: url("bc.jpg");
+    width: 100%;
+    height:60vh;
+    background-size: cover;
+    background-position: top  70px center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+}
+#banner1 h4{
+    color: aliceblue;
+}
+#banner1 h1{
+    color: antiquewhite;
+}
+#banner1 button{
+    background-color: coral;
+}
+.kit{
+    height: 100px;
+    width: 139px;
+}
+/* Footer Styles */
+footer {
+    background-color: darkolivegreen;
+    width: 100%; /* Ensure it covers the full width */
+    margin: 0; /* Remove extra margin */
+    padding: 0; /* Ensure no padding adds extra space */
+    overflow: hidden; /* Prevent any overflow causing a slider */
+}
+
+.ft {
+    color: white;
+}
+
+footer h5 {
+    color: bisque;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Responsive Footer for smaller screens */
+@media (max-width: 768px) {
+    .footer-one {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .footer-one img {
+        margin: 0 auto;
+    }
+}
+
+footer li {
+    padding-bottom: 4px;
+}
+
+footer li a {
+    font-size: 0.8rem;
+    color: antiquewhite;
+}
+
+footer li a:hover {
+    color: antiquewhite;
+}
+
+footer p {
+    color: white;
+    font-size: 0.8rem;
+}
+
+/* Footer Copyright Social Icons */
+footer.copyright a {
+    color: white;
+    width: 38px;
+    height: 38px;
+    background-color: aliceblue;
+    display: inline-block;
+    text-align: center;
+    line-height: 38px;
+    border-radius: 50%;
+    transition: 0.3s ease;
+    margin: 0 5px;
+}
+
+footer.copyright a:hover {
+    color: azure;
+    background-color: chocolate;
+}
+
+/* Adjust container widths */
+.container, .container-fluid {
+    max-width: 100%; /* Ensure full width usage */
+    padding-left: 0; /* Remove extra padding causing overflow */
+    padding-right: 0;
+    margin: 0 auto; /* Center the container */
+}
+
+/* Body adjustments to avoid sliders */
+body {
+    overflow-x: hidden; /* Ensure no horizontal scrolling on the page */
+    margin: 0; /* Remove default margins */
+    padding: 0; /* Remove default paddings */
+}
+
+#featured h3 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#featured hr {
+    border: 1px solid #333;
+    width: 50px;
+    margin: 0 auto 20px;
+}
+/* Blog Container */
+#blog-container .post {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#blog-container .post .post-img {
+    overflow: hidden;
+    cursor: pointer;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Ensure the image container takes up the full width */
+    padding: 0;
+}
+
+#blog-container .post img {
+    transition: 0.3s ease;
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+}
+
+#blog-container .post:hover img {
+    transform: scale(1.1) rotate(-5deg);
+    opacity: 0.8;
+}
+
+#blog-container .post h3 {
+    transition: 0.3s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+#blog-container .post:hover h3 {
+    color: coral;
+}
+
+#blog-container .post p {
+    font-size: 0.8rem; /* Adjust text size to fit under the image */
+    margin-top: 0.5rem;
+    text-align: center;
+}
+.navbar-brand img {
+    height: 50px; /* Adjust the height of the logo */
+    width: auto;
+}
+
+.navbar-nav .nav-link {
+    padding: 0.5rem 1rem; /* Adjust padding to reduce height */
+    font-size: 0.9rem; /* Optionally reduce font size */
+}
+
+.navbar-toggler {
+    padding: 0.25rem 0.5rem; /* Reduce padding for the toggle button */
+    font-size: 1rem;
+}/*Shopping Cart*/
+#cart-container table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+#cart-container table thead {
+    font-weight: 700;
+}
+#cart-container table thead {
+    background: burlywood;
+    color: black;
+    border: none;
+    padding: 6px 0;
+}
+#cart-container table td {
+    border: 1px solid gray;
+    text-align: center;
+}
+#cart-container table td:nth-child(1) {
+    width: 100px;
+}
+#cart-container table td:nth-child(2),
+#cart-container table td:nth-child(3) {
+    width: 200px;
+}
+#cart-container table td:nth-child(4),
+#cart-container table td:nth-child(5),
+#cart-container table td:nth-child(6) {
+    width: 170px;
+}
+#cart-container table tbody img {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+}
+#cart-container table tbody i {
+    color: black;
+}
+/* Centering the cart bottom section */
+#cart-bottom {
+    display: flex;
+    flex-direction: column; /* Change direction to column to stack elements */
+    align-items: center; /* Center all child elements */
+    justify-content: center; /* Center vertically */
+    margin-top: 20px;
+}
+#cart-bottom .total {
+    width: 50%; /* Set a width to make it centered */
+    border: 1px solid gray;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    text-align: center;
+}
+#cart-bottom .total h6 {
+    color: black;
+    margin-bottom: 20px;
+}
+#cart-bottom .total button {
+    margin-top: 20px;
+    background-color: blueviolet;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%; /* Make button take full width */
+    display: block;
+}
+#cart-bottom .total button:hover {
+    background-color: darkviolet;
+}
+/* Styling for total text and amount */
+.total-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.total-amount {
+    font-size: 30px;
+    color: green;
+    margin-bottom: 20px;
+}

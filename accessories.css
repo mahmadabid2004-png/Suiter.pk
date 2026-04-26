@@ -1,0 +1,105 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.box1 {
+    border: 1px solid black;
+    background-color: black;
+    width: 100%;
+    position: relative;
+    padding: 5px 10px;
+    box-sizing: border-box;
+}
+
+.box1 ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.box1 ul li {
+    margin: 0 10px;
+    font-size: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+}
+
+.box1 ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+.box1 ul li i {
+    color: white;
+    margin-left: 5px;
+}
+
+.box1 h5 {
+    margin: 0;
+    color: white;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: normal;
+    box-sizing: border-box;
+    width: auto;
+}
+
+.content {
+    padding: 20px;
+}
+
+.image-gallery {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Spacing between images */
+}
+
+.image-gallery img {
+    flex: 1; /* Each image takes up equal space */
+    max-width: 100%; /* Ensure images are responsive */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Cover the area without distorting */
+}
+
+.footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Media Queries for Smaller Screens */
+@media (max-width: 768px) {
+    .box1 {
+        text-align: left;
+    }
+
+    .box1 ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .box1 ul li {
+        margin: 5px 0;
+    }
+
+    .image-gallery {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .image-gallery img {
+        width: 100%; /* Full width on small screens */
+        height: auto;
+    }
+}

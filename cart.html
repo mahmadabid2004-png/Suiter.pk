@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart — Suiters.pk</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" />
+    <link rel="icon" href="9.jpg" type="image/png" />
+    <style>
+        .cart-badge { background:coral; color:#fff; border-radius:50%; font-size:10px; padding:2px 6px; position:relative; top:-8px; left:-6px; display:none; }
+        .cart-page { padding: 110px 0 60px; }
+        .cart-page h2 { font-weight: 800; font-size: 1.8rem; margin-bottom: 8px; }
+        .cart-item-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: box-shadow 0.2s;
+        }
+        .cart-item-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+        .cart-item-img { width: 90px; height: 80px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+        .cart-item-details { flex: 1; }
+        .cart-item-details h5 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; color: #2d2d2d; }
+        .cart-item-details .size-badge {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 6px;
+        }
+        .cart-item-details .price { color: darkolivegreen; font-weight: 700; font-size: 1rem; margin: 0; }
+        .qty-control { display: flex; align-items: center; gap: 8px; }
+        .qty-btn {
+            width: 30px; height: 30px; border-radius: 50%;
+            border: 1.5px solid #ddd;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem; font-weight: 700;
+            transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .qty-btn:hover { background: darkolivegreen; color: #fff; border-color: darkolivegreen; }
+        .qty-val { font-size: 1rem; font-weight: 700; min-width: 28px; text-align: center; }
+        .remove-btn {
+            background: none; border: none;
+            color: #ccc; font-size: 1.2rem;
+            cursor: pointer; transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .remove-btn:hover { color: #e53935; }
+
+        /* Summary Card */
+        .summary-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 28px;
+            position: sticky;
+            top: 90px;
+        }
+        .summary-card h4 { font-weight: 800; margin-bottom: 20px; color: darkolivegreen; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; }
+        .summary-row.total { font-weight: 800; font-size: 1.15rem; border-top: 2px solid #eee; padding-top: 14px; margin-top: 6px; }
+        .checkout-btn {
+            width: 100%;
+            background: darkolivegreen;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: 0.3s;
+        }
+        .checkout-btn:hover { background: #3b5323; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(85,107,47,0.3); }
+        .continue-btn {
+            width: 100%;
+            background: none;
+            color: darkolivegreen;
+            border: 2px solid darkolivegreen;
+            padding: 11px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .continue-btn:hover { background: darkolivegreen; color: #fff; }
+
+        /* Empty cart */
+        .empty-cart {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .empty-cart i { font-size: 5rem; color: #ddd; margin-bottom: 20px; display: block; }
+        .empty-cart h4 { font-weight: 700; color: #555; margin-bottom: 10px; }
+        .empty-cart p { color: #999; margin-bottom: 24px; }
+        .empty-cart a {
+            background: darkolivegreen; color: #fff;
+            padding: 13px 36px; border-radius: 8px;
+            font-weight: 700; text-decoration: none;
+            transition: 0.3s; display: inline-block;
+        }
+        .empty-cart a:hover { background: #3b5323; text-decoration: none; color: #fff; }
+
+        .item-subtotal { font-weight: 700; color: darkolivegreen; font-size: 0.95rem; white-space: nowrap; }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkolivegreen; position: fixed; top:0; width:100%; z-index:1000;">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="9.jpg" alt="Suiter.pk Logo" width="90" height="auto" />
+            <b style="color:#000">Suiter.pk</b>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navCart">
+            <span><i id="bar" class="fa-solid fa-bars" style="color:#fff; font-size:1.4rem;"></i></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navCart">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+                <li class="nav-item nav-login-link"><a class="nav-link" href="login.html"><i class="fas fa-user mr-1"></i>Login</a></li>
+                <li class="nav-item nav-logout-link" style="display:none">
+                    <a class="nav-link nav-username" href="orders.html" style="color:coral; font-weight:700;"></a>
+                </li>
+                <li class="nav-item nav-logout-link" style="display:none">
+                    <a class="nav-link" href="#" onclick="doLogout()" style="color:#fff;">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-badge">0</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="cart-page container">
+    <div id="cart-main">
+        <!-- Filled by JS -->
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="mt-5 py-1">
+    <div class="row container mx-auto pt-5 m-5">
+        <div class="footer-one col-lg-3 col-md-6 col-12">
+            <img src="logoo.png" alt="" height="100px" width="100px" />
+            <p class="pt-3"><br /><b>Suiters.pk </b><br />"Thank you for shopping with us!"</p>
+        </div>
+        <div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
+            <h5 class="pb-2">Quick Links:</h5>
+            <div class="ft"><ul class="text-uppercase">
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="orders.html">My Orders</a></li>
+            </ul></div>
+        </div>
+        <div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
+            <h5 class="pb-2">Contact us:</h5>
+            <div><h6 class="text-uppercase">Phone:</h6><p>0324-5531819</p></div>
+            <div><h6 class="text-uppercase">Email:</h6><p>suiters.pk@gmail.com</p></div>
+        </div>
+    </div>
+    <div class="copyright mt-5">
+        <div class="container mx-auto">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-md-6 col-12"><p class="mb-0">Suiters.pk eCommerce 2024. All Rights Reserved.</p></div>
+                <div class="col-lg-4 col-md-6 col-12 text-center mb-2">
+                    <a href="https://www.facebook.com/zainabchaudary.zani/" class="mr-2"><i class="fa-brands fa-square-facebook"></i></a>
+                    <a href="https://www.linkedin.com/in/zaynab-rehan-b150552b8/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="cart.js"></script>
+<script>
+    function renderCart() {
+        var cart   = getCart();
+        var main   = document.getElementById('cart-main');
+        main.innerHTML = '';
+
+        if (cart.length === 0) {
+            main.innerHTML = '<div class="empty-cart"><i class="fas fa-shopping-cart"></i><h4>Your cart is empty</h4><p>Looks like you haven\'t added anything yet.</p><a href="shop.html">Start Shopping</a></div>';
+            return;
+        }
+
+        var row = document.createElement('div');
+        row.className = 'row';
+
+        /* Left column — items */
+        var leftCol = document.createElement('div');
+        leftCol.className = 'col-lg-8';
+
+        var heading = document.createElement('h2');
+        heading.textContent = 'Shopping Cart';
+        heading.style.cssText = 'font-weight:800; font-size:1.8rem; margin-bottom:22px;';
+        leftCol.appendChild(heading);
+
+        var total = 0;
+
+        cart.forEach(function (item) {
+            total += item.price * item.quantity;
+            var card = buildItemCard(item);
+            leftCol.appendChild(card);
+        });
+
+        /* Right column — summary */
+        var rightCol = document.createElement('div');
+        rightCol.className = 'col-lg-4';
+
+        var summary = document.createElement('div');
+        summary.className = 'summary-card';
+        summary.innerHTML =
+            '<h4><i class="fas fa-receipt mr-2"></i>Order Summary</h4>' +
+            '<div class="summary-row"><span>Items (' + cart.length + ')</span><span>Rs. ' + total + '</span></div>' +
+            '<div class="summary-row"><span>Shipping</span><span style="color:darkolivegreen;font-weight:700;">FREE</span></div>' +
+            '<div class="summary-row total"><span>Total</span><span id="cart-grand-total">Rs. ' + total + '</span></div>';
+
+        var checkBtn = document.createElement('button');
+        checkBtn.className = 'checkout-btn';
+        checkBtn.innerHTML = '<i class="fas fa-lock mr-2"></i>Proceed to Checkout';
+        checkBtn.onclick = function () { window.location.href = 'checkout.html'; };
+
+        var contBtn = document.createElement('button');
+        contBtn.className = 'continue-btn';
+        contBtn.textContent = '← Continue Shopping';
+        contBtn.onclick = function () { window.location.href = 'shop.html'; };
+
+        summary.appendChild(checkBtn);
+        summary.appendChild(contBtn);
+        rightCol.appendChild(summary);
+
+        row.appendChild(leftCol);
+        row.appendChild(rightCol);
+        main.appendChild(row);
+    }
+
+    function buildItemCard(item) {
+        var card = document.createElement('div');
+        card.className = 'cart-item-card';
+        card.id = 'cart-item-' + item.id;
+
+        /* Image */
+        var img = document.createElement('img');
+        img.src = item.image;
+        img.alt = item.name;
+        img.className = 'cart-item-img';
+        card.appendChild(img);
+
+        /* Details */
+        var details = document.createElement('div');
+        details.className = 'cart-item-details';
+
+        var nameEl = document.createElement('h5');
+        nameEl.textContent = item.name;
+        details.appendChild(nameEl);
+
+        if (item.size) {
+            var sizeBadge = document.createElement('span');
+            sizeBadge.className = 'size-badge';
+            sizeBadge.textContent = 'Size: ' + item.size;
+            details.appendChild(sizeBadge);
+            details.appendChild(document.createElement('br'));
+        }
+
+        var price = document.createElement('p');
+        price.className = 'price';
+        price.textContent = 'Rs. ' + item.price;
+        details.appendChild(price);
+
+        /* Qty controls */
+        var qtyDiv = document.createElement('div');
+        qtyDiv.className = 'qty-control mt-2';
+
+        var minusBtn = document.createElement('button');
+        minusBtn.className = 'qty-btn';
+        minusBtn.textContent = '−';
+        minusBtn.onclick = (function(id){ return function() { changeQty(id, -1); }; })(item.id);
+
+        var qtyVal = document.createElement('span');
+        qtyVal.className = 'qty-val';
+        qtyVal.id = 'qty-' + item.id;
+        qtyVal.textContent = item.quantity;
+
+        var plusBtn = document.createElement('button');
+        plusBtn.className = 'qty-btn';
+        plusBtn.textContent = '+';
+        plusBtn.onclick = (function(id){ return function() { changeQty(id, 1); }; })(item.id);
+
+        qtyDiv.appendChild(minusBtn);
+        qtyDiv.appendChild(qtyVal);
+        qtyDiv.appendChild(plusBtn);
+        details.appendChild(qtyDiv);
+        card.appendChild(details);
+
+        /* Subtotal */
+        var sub = document.createElement('div');
+        sub.className = 'item-subtotal';
+        sub.id = 'sub-' + item.id;
+        sub.textContent = 'Rs. ' + (item.price * item.quantity);
+        card.appendChild(sub);
+
+        /* Remove */
+        var removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        removeBtn.title = 'Remove';
+        removeBtn.onclick = (function(id){ return function() { removeItem(id); }; })(item.id);
+        card.appendChild(removeBtn);
+
+        return card;
+    }
+
+    function changeQty(itemId, delta) {
+        var cart = getCart();
+        var idx  = cart.findIndex(function(i) { return i.id === itemId; });
+        if (idx === -1) return;
+        cart[idx].quantity += delta;
+        if (cart[idx].quantity < 1) { cart.splice(idx, 1); }
+        saveCart(cart);
+        renderCart();
+        updateCartBadge();
+    }
+
+    function removeItem(itemId) {
+        var cart = getCart().filter(function(i) { return i.id !== itemId; });
+        saveCart(cart);
+        renderCart();
+        updateCartBadge();
+        showToast('Item removed from cart', 'error');
+    }
+
+    function doLogout() {
+        localStorage.removeItem('sk_user');
+        if (typeof firebase !== 'undefined' && firebaseReady) { firebase.auth().signOut(); }
+        window.location.href = 'index.html';
+    }
+
+    window.addEventListener('DOMContentLoaded', renderCart);
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
