@@ -205,28 +205,15 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         var user = getCurrentUser();
-        var content = document.getElementById('ordersContent');
-
-        if (!user) {
-            content.innerHTML =
-                '<div class="login-prompt">' +
-                '  <i class="fas fa-user-lock"></i>' +
-                '  <h4>Login to view your orders</h4>' +
-                '  <p>Create an account or login to track your orders and order history.</p>' +
-                '  <a href="login.html?redirect=orders.html">Login / Sign Up</a>' +
-                '</div>';
-            return;
-        }
-
         loadOrders(user);
     });
 
     function loadOrders(user) {
-        // Load from localStorage (always available)
+        // Always load from localStorage first (works for guests + logged-in users)
         var localOrders = JSON.parse(localStorage.getItem('sk_orders') || '[]');
 
-        if (firebaseReady && dbReady) {
-            // Try to load from Firestore
+        // If logged in and Firestore available, merge with cloud orders
+        if (user && firebaseReady && dbReady) {
             firebase.firestore().collection('orders')
                 .where('userId', 'in', [user.uid, 'guest'])
                 .orderBy('createdAt', 'desc')
@@ -245,6 +232,7 @@
                     renderOrders();
                 });
         } else {
+            // Guest user or Firestore not configured — use localStorage only
             allOrders = localOrders;
             renderOrders();
         }
@@ -259,12 +247,14 @@
             : allOrders.filter(function(o) { return o.status === currentFilter || o.paymentStatus === currentFilter; });
 
         if (allOrders.length === 0) {
+            var user = getCurrentUser();
             content.innerHTML =
                 '<div class="empty-orders">' +
                 '  <i class="fas fa-box-open"></i>' +
                 '  <h4>No orders yet</h4>' +
                 '  <p>You haven\'t placed any orders. Start shopping!</p>' +
                 '  <a href="shop.html">Shop Now</a>' +
+                (user ? '' : '<br/><br/><p style="font-size:0.85rem; color:#aaa;"><a href="login.html?redirect=orders.html" style="color:coral; font-weight:600;">Login</a> to sync orders across devices.</p>') +
                 '</div>';
             return;
         }

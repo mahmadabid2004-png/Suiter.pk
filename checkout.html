@@ -395,16 +395,23 @@ function buildRightPanel(cart) {
         '  <div class="total-row grand"><span>Total</span><span>Rs. ' + total + '</span></div>' +
         '</div>';
 
-    card.innerHTML += totalsHTML;
+    // NOTE: Do NOT use card.innerHTML += after this point — it destroys JS listeners.
+    // Append totals first, then button, then secure note — all via DOM methods.
+    var totalsEl = document.createElement('div');
+    totalsEl.innerHTML = totalsHTML;
+    card.appendChild(totalsEl);
 
     var btn = document.createElement('button');
     btn.className = 'place-order-btn';
     btn.id = 'placeOrderBtn';
     btn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Place Order';
-    btn.onclick = placeOrder;
+    btn.addEventListener('click', placeOrder);
     card.appendChild(btn);
 
-    card.innerHTML += '<p class="secure-note"><i class="fas fa-lock mr-1"></i>Your info is safe and secure</p>';
+    var secureNote = document.createElement('p');
+    secureNote.className = 'secure-note';
+    secureNote.innerHTML = '<i class="fas fa-lock mr-1"></i>Your info is safe and secure';
+    card.appendChild(secureNote);
 
     p.appendChild(card);
 }
@@ -509,9 +516,27 @@ function placeOrder() {
         if (currentPayMethod !== 'cod') {
             document.getElementById('paymentReminder').textContent =
                 '⚠️ Please send payment via ' + methodLabels[currentPayMethod] + ' to confirm your order.';
+        } else {
+            document.getElementById('paymentReminder').textContent = '';
         }
         document.getElementById('successOverlay').classList.add('show');
         btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Place Order';
+    }).catch(function(err) {
+        // Even if something fails, the order is already saved locally — show success
+        console.warn('[Suiters.pk] Order post-processing error (order still saved locally):', err);
+        clearCart();
+        updateCartBadge();
+        document.getElementById('displayOrderId').textContent = '#' + orderId;
+        if (currentPayMethod !== 'cod') {
+            document.getElementById('paymentReminder').textContent =
+                '⚠️ Please send payment via ' + methodLabels[currentPayMethod] + ' to confirm your order.';
+        } else {
+            document.getElementById('paymentReminder').textContent = '';
+        }
+        document.getElementById('successOverlay').classList.add('show');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Place Order';
     });
 }
 
