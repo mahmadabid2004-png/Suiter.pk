@@ -1,742 +1,604 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Suiter.pk</title>
-		<link
-			rel="stylesheet"
-			href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
-			integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-			crossorigin="anonymous"
-		/>
-		<link rel="stylesheet" href="style.css" />
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-			crossorigin="anonymous"
-		/>
-		
-			<!-- Font Awesome -->
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-		</head>
-		
-		<link rel="icon" href="9.jpg" type="image/png" />
-		<style>
-			.cart-badge {
-				background: coral;
-				color: #fff;
-				border-radius: 50%;
-				font-size: 10px;
-				padding: 2px 6px;
-				position: relative;
-				top: -8px;
-				left: -6px;
-				display: none;
-			}
-			#searchInput {
-				display: none;
-				width: 200px;
-				padding: 5px;
-				margin-left: 10px;
-			}
-			.product img {
-        width: 100%;
-        height: auto;
-        min-height: 350px; /* Minimum height */
-        aspect-ratio: 4 / 3; /* Maintains the aspect ratio */
-        object-fit: cover; /* Ensure the image covers the container */
-    }
-			.navbar-toggler {
-				border: none;
-			}
-	
-			@media (max-width: 768px) {
-				#searchInput {
-					width: 100%;
-					display: block;
-					margin-top: 10px;
-				}
-	
-				.navbar-nav {
-					text-align: center;
-				}
-	
-				.navbar-nav .nav-item {
-					margin: 10px 0;
-				}
-			}
-	
-			.product img {
-				width: 100%;
-				height: auto;
-			}
-	
-			.product h5, .product h4, .product .buy-btn {
-				margin: 5px 0;
-			}
-	
-			.product .buy-btn a {
-				color: #fff;
-				text-decoration: none;
-			}
-	
-			.buy-btn {
-				background-color: #007bff;
-				padding: 10px;
-				border-radius: 5px;
-				display: inline-block;
-			}
-	
-			/* Additional Media Queries for Smaller Screens */
-			@media (max-width: 576px) {
-				.product {
-					margin-bottom: 20px;
-				}
-	
-				.navbar-brand img {
-					width: 80px;
-				}
-	
-				.navbar-toggler {
-					margin-top: 10px;
-				}
-			}
-			#reviews {
-    background-color: #f9f9f9;  /* Light background color for contrast */
-    padding: 40px 0;
-}
-
-.review img {
-    border-radius: 50%;
-}
-
-.review h5.customer-name {
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.review .star {
-    color: #f5c518; /* Gold color for stars */
-}
-
-.review .review-text {
-    font-style: italic;
-    color: #555;
-}
-
-#reviews .container h3 {
-    margin-bottom: 30px;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-#reviews hr {
-    width: 50px;
-    height: 2px;
-    background-color: #000;
-    margin: 10px auto;
-}
-
-#reviews .container p {
-    font-size: 16px;
-    color: #666;
-}
-
-		</style>
-	
-		<script>
-			document.addEventListener("DOMContentLoaded", function () {
-				const searchIcon = document.querySelector(".nav-link i.fas.fa-search");
-				const searchInput = document.getElementById("searchInput");
-	
-				searchIcon.addEventListener("click", function () {
-					searchInput.classList.toggle("navbar-search-active");
-					searchInput.style.display = searchInput.style.display === 'block' ? 'none' : 'block';
-				});
-			});
-			
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get search input element and products container
-        const searchInput = document.getElementById('searchInput');
-        const products = document.querySelectorAll('.product');
-        
-        // Function to filter products
-        function filterProducts() {
-            const searchText = searchInput.value.toLowerCase();
-            products.forEach(product => {
-                const productName = product.querySelector('.p-name').textContent.toLowerCase();
-                if (productName.includes(searchText)) {
-                    product.style.display = 'block'; // Show product
-                } else {
-                    product.style.display = 'none'; // Hide product
-                }
-            });
-        }
-
-        // Attach event listener to the search input
-        searchInput.addEventListener('input', filterProducts);
-    });
-</script>
-	</head>
-	<body>
-		<!--Navigation-->
-		<nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkolivegreen; py-0 fixed-top">
-			<div class="container">
-				<!-- Logo -->
-				<a class="navbar-brand" href="#">
-					<img src="9.jpg" alt="Suiter.pk Logo" width="100" height="auto" />
-					<b class="custom-color">Suiter.pk</b>
-				</a>
-				
-				
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-					<span><i id="bar" class="fa-solid fa-bars"></i></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul class="navbar-nav ml-auto">
-						<li class="nav-item">
-							<a class="nav-link" href="index.html">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="shop.html">Shop</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="blog.html">Blog</a>
-						</li>
-						<li class="nav-item nav-login-link">
-							<a class="nav-link" href="login.html"><i class="fas fa-user mr-1"></i>Login</a>
-						</li>
-						<li class="nav-item nav-logout-link" style="display:none">
-							<a class="nav-link nav-username" href="orders.html" style="color:coral; font-weight:700;"></a>
-						</li>
-						<li class="nav-item nav-logout-link" style="display:none">
-							<a class="nav-link" href="#" onclick="doLogout()" style="color:#fff;">Logout</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#"><i class="fas fa-search"></i></a>
-							<input type="text" id="searchInput" placeholder="Search for products..." />
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-badge">0</span></a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-		
-
-		<section id="home">
-			<div class="container">
-				<h5><b>NEW ARRIVALS</b></h5>
-				<h1><span>Best Price </span>This Year</h1>
-				<p>
-					<b
-						>Shoomatic offers your very comfortable time <br />on walking and
-						exercises</b
-					>
-				</p>
-				<div class="color"></div><button><a href="shop.html"> Shop Now</a></button>
-			</div>
-			</div>
-		</section>
-
-		<section id="new">
-			<div class="container text-center mt-5 py-3">
-				<h3>Welcome to Suiters.pk!</h3>
-				<hr class="mx-auto" />
-				<p>"Stay Stylish, Stay You! Shop at Suiters.pk"</p>
-			</div>
-			<div class="row">
-				<div class="col-lg-4">
-					<img class="img-fluid" src="intro.jpg" alt="" />
-					<div class="details">
-						<h2>Shirts</h2>
-						<button class="text text-uppercase"> <a href="shop.html">Shop Now</a></button>
-					</div>
-				</div>
-				<div class="col-lg-4">
-					<img class="img-fluid" src="pant.jpg" alt="" />
-					<div class="details">
-						<h2>Pants</h2>
-						<button class="text text-uppercase"><a href="shop.html">Shop Now</a></button>
-					</div>
-				</div>
-				<div class="col-lg-4">
-					<img class="img-fluid" src="acc.jpg" alt="" height="180px" />
-					<div class="details">
-						<h2>Accessories</h2>
-						<button class="text text-uppercase"><a href="shop.html">Shop Now</a></button>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!--Button Down Shirts-->
-		<section id="featured" class="my-5 pb-5">
-			<div class="container text-center mt-4 py-2">
-				<h3>BUTTON DOWN SHIRTS</h3>
-				<hr class="mx-auto" />
-				<p>Stay Glamourous in our OUTFITS!</p>
-			</div>
-			<div class="row mx-auto container-fluid">
-				<div   class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="1.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">White Button Down Shirt</h5>
-					<h4 class="p-price">Rs.2000</h4>
-					<button class="buy-btn"><a href="p1.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="b2.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Light Purple Button Down Shirt</h5>
-					<h4 class="p-price">Rs.2500</h4>
-					<button class="buy-btn"><a href="p2.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="b3.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Light Pink Button Down Shirt</h5>
-					<h4 class="p-price">Rs.2000</h4>
-					<button class="buy-btn"><a href="p3.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="b4.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Yellowish Button Down Shirt</h5>
-					<h4 class="p-price">Rs.1700</h4>
-					<button class="buy-btn"><a href="p4.html">Shop Now</a></button>
-				</div>
-			</div>
-		</section>
-		<section id="reviews" class="my-5">
-			<div class="container text-center mt-4 py-2">
-				<h3>CUSTOMER REVIEWS</h3>
-				<hr class="mx-auto" />
-				<p>Here's what our customers have to say!</p>
-			</div>
-			
-			<div class="row mx-auto container-fluid">
-				<!-- Review 1 -->
-				<div class="review text-center col-lg-4 col-md-6 col-12 py-3">
-					
-					<h5 class="customer-name">Tooba Khan</h5>
-					<div class="star mb-2">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<p class="review-text">"Great quality! The shirt fits perfectly and the fabric is very comfortable."</p>
-				</div>
-		
-				<!-- Review 2 -->
-				<div class="review text-center col-lg-4 col-md-6 col-12 py-3">
-					
-					<h5 class="customer-name">Javeria Ismaeel</h5>
-					<div class="star mb-2">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star-half-alt"></i> <!-- Half star -->
-					</div>
-					<p class="review-text">"Stylish and comfortable. I'll definitely buy more from here!"</p>
-				</div>
-		
-				<!-- Review 3 -->
-				<div class="review text-center col-lg-4 col-md-6 col-12 py-3">
-					<h5 class="customer-name">Ayesha Izhar</h5>
-					<div class="star mb-2">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<p class="review-text">"Fantastic service and the shirt arrived quickly. Love it!"</p>
-				</div>
-			</div>
-		</section>
-		
-		<section id="banner" class="my-5 py-5">
-			<div class="container">
-				<h4>End Season's Sale</h4>
-				<h1>
-					Autumn Collection<br />
-					Up To 20% OFF
-				</h1>
-				<button class="text-uppercase"><a href="shop.html">Shop Now</a></button>
-			</div>
-		</section>
-		<!-- Pants Section-->
-
-		<section id="Clothes" class="my-5">
-			<div class="container text-center mt-5 py-2">
-				<h3>Pants</h3>
-				<hr class="mx-auto" />
-				<p>Where style meets comfort: Discover your New Go-to Pieces.</p>
-			</div>
-			<div class="row mx-auto container-fluid">
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="p5.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Black Bottom Jeans</h5>
-					<h4 class="p-price">Rs.3000</h4>
-					<button class="buy-btn"><a href="p7.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="p2.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Blue Wide Bottom jeans</h5>
-					<h4 class="p-price">Rs.3000</h4>
-					<button class="buy-btn"><a href="p8.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="p3.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Wide legs with Shirt</h5>
-					<h4 class="p-price">Rs.4000</h4>
-					<button class="buy-btn"><a href="p23.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="p4.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Wide Pants</h5>
-					<h4 class="p-price">Rs.2500</h4>
-					<button class="buy-btn"><a href="p9.html">Shop Now</a></button>
-				</div>
-			</div>
-		</section>
-		
-		<!--T-Shirts Section-->
-		<section id="Western" class="my-5">
-			<div class="container text-center mt-3 py-0">
-				<h3>T-SHIRTS</h3>
-				<hr class="mx-auto" />
-				<p>One-of-a-Kind Looks: Unveil Your Unique Style.</p>
-			</div>
-			<div class="row mx-auto container-fluid">
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="s1.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Collar Shirt</h5>
-					<h4 class="p-price">Rs.3300</h4>
-					<button class="buy-btn"><a href="p10.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="s2.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Black Shirt</h5>
-					<h4 class="p-price">Rs.3500</h4>
-					<button class="buy-btn"><a href="p11.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="s3.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Green Sweat Shirt</h5>
-					<h4 class="p-price">Rs.3500</h4>
-					<button class="buy-btn"><a href="p12.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="s4.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Customized Sweat Shirt</h5>
-					<h4 class="p-price">Rs.2500</h4>
-					<button class="buy-btn"><a href="p13.html">Shop Now</a></button>
-				</div>
-			</div>
-		</section>
-		
-		<!-- Hoodies-->
-		<section id="Jumpsuits" class="my-5">
-			<div class="container text-center mt-3 py-0">
-				<h3>Hoodies</h3>
-				<hr class="mx-auto" />
-				<p>One-of-a-Kind Looks: Unveil Your Unique Style.</p>
-			</div>
-			<div class="row mx-auto container-fluid">
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="h1.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Light Brown Hoodie</h5>
-					<h4 class="p-price">Rs.2700</h4>
-					<button class="buy-btn"><a href="p14.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="h2.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Black Shirt</h5>
-					<h4 class="p-price">Rs.1500</h4>
-					<button class="buy-btn"><a href="p15.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="h3.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Black Hoodie</h5>
-					<h4 class="p-price">Rs.3500</h4>
-					<button class="buy-btn"><a href="p15.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="h4.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Green Hoodie</h5>
-					<h4 class="p-price">Rs.5000</h4>
-					<button class="buy-btn"><a href="p20.html">Shop Now</a></button>
-				</div>
-			</div>
-		</section>
-		<section id="banner1" class="my-5 py-5">
-			<div class="container">
-				<h4>End Season's Sale</h4>
-				<h1>
-					Autumn Collection<br />
-					Up To 20% OFF
-				</h1>
-				<button class="text-uppercase"><a href="shop.html">Shop Now</a></button>
-			</div>
-		</section>
-		<section id="Jumpsuits" class="my-5">
-			<div class="container text-center mt-3 py-0">
-				<h3>Accessories</h3>
-				<hr class="mx-auto" />
-				<p>Wear our accessories and gain confidence:)</p>
-			</div>
-			<div class="row mx-auto container-fluid">
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="bag1.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Shoulder Bag</h5>
-					<h4 class="p-price">Rs.3000</h4>
-					<button class="buy-btn"><a href="p18.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="neck.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Double Necklace</h5>
-					<h4 class="p-price">Rs.1500</h4>
-					<button class="buy-btn"><a href="p19.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="scrunch.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Pack of three Scrunchies</h5>
-					<h4 class="p-price">Rs.1000</h4>
-					<button class="buy-btn"><a href="p22.html">Shop Now</a></button>
-				</div>
-				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
-					<img class="img-fluid mb-3" src="bag.jpg" alt="" />
-					<div class="star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-					</div>
-					<h5 class="p-name">Black Shoulder Bag</h5>
-					<h4 class="p-price">Rs.5000</h4>
-					<button class="buy-btn"><a href="p24.html">Shop Now</a></button>
-				</div>
-			</div>
-		</section>
-
-		<!-- Footer -->
-		<footer class="mt-5 py-1">
-			<div class="row container mx-auto pt-5 m-5">
-				<div class="footer-one col-lg-3 col-md-6 col-12">
-					<img src="logoo.png" alt="" height="100px" width="100px" />
-					<p class="pt-3">
-						<br /><b>Suiters.pk </b><br />
-						"Thank you for shopping with us! Stay stylish and connected—follow
-						us on social media for the latest trends, exclusive offers, and
-						more. For any questions, our customer service team is here to help!"
-					</p>
-				</div>
-				<div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
-					<h5 class="pb-2">Featured:</h5>
-					<div class="ft">
-						<ul class="text-uppercase">
-							<li><a href="shop.html">Women</a></li>
-							<li><a href="shop.html">Luxury Pret</a></li>
-							<li><a href="shop.html">Lawn/Cotton/Chiffon</a></li>
-							<li><a href="shop.html">Western</a></li>
-							<li><a href="shop.html">Denims</a></li>
-							<li><a href="shop.html">Bridals</a></li>
-							<li><a href="shop.html">Daily wear</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
-					<h5 class="pb-2">Contact us:</h5>
-					<div>
-						<h6 class="text-uppercase">Phone no:</h6>
-						<p>0324-5531819</p>
-					</div>
-					<div>
-						<h6 class="text-uppercase">Instagram:</h6>
-						<p>Suiters.pk</p>
-					</div>
-					<div>
-						<h6 class="text-uppercase">Email:</h6>
-						<p>suiters.pk@gmail.com</p>
-					</div>
-				</div>
-			
-			</div>
-			<div class="copyright mt-5">
-				<div class="container mx-auto">
-					<div class="row align-items-center">
-						<div class="col-lg-3 col-md-6 col-12 d-flex align-items-center">
-							
-							<p class="mb-0">
-								Suiters.pk eCommerce "2024. All Rights are Reserved.
-							</p>
-						</div>
-						<div class="col-lg-4 col-md-6 col-12 text-lg-left text-center mb-2">
-							<a href="https://www.facebook.com/zainabchaudary.zani/" class="mr-2"
-								><i class="fa-brands fa-square-facebook"></i
-							></a>
-							
-							<a href="https://www.linkedin.com/in/zaynab-rehan-b150552b8/" target="_blank" rel="noopener noreferrer">
-								<i class="fa-brands fa-linkedin"></i>
-							</a>
-							
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
-		<!-- JavaScript Libraries -->
-		<script src="cart.js"></script>
-		<script
-			src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-			crossorigin="anonymous"
-		></script>
-		<script
-			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-			integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBkDb9l+J6Cf64IhziAM5QHpP8N+OJ0v1JGzZzbnfQ"
-			crossorigin="anonymous"
-		></script>
-		<script
-			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-			integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-			crossorigin="anonymous"
-		></script>
-	</body>
-</html>
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Suiters.pk  —  Fashion For Everyone</title>
+		<meta name="description" content="Suiters.pk  —  Shop the latest shirts, pants, hoodies and accessories at the best prices in Pakistan." />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="style.css" />
+		</head>
+		
+		<link rel="icon" href="9.jpg" type="image/png" />
+	
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				const searchIcon = document.querySelector(".nav-link i.fas.fa-search");
+				const searchInput = document.getElementById("searchInput");
+	
+				searchIcon.addEventListener("click", function () {
+					searchInput.classList.toggle("navbar-search-active");
+					searchInput.style.display = searchInput.style.display === 'block' ? 'none' : 'block';
+				});
+			});
+			
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get search input element and products container
+        const searchInput = document.getElementById('searchInput');
+        const products = document.querySelectorAll('.product');
+        
+        // Function to filter products
+        function filterProducts() {
+            const searchText = searchInput.value.toLowerCase();
+            products.forEach(product => {
+                const productName = product.querySelector('.p-name').textContent.toLowerCase();
+                if (productName.includes(searchText)) {
+                    product.style.display = 'block'; // Show product
+                } else {
+                    product.style.display = 'none'; // Hide product
+                }
+            });
+        }
+
+        // Attach event listener to the search input
+        searchInput.addEventListener('input', filterProducts);
+    });
+</script>
+	</head>
+	<body>
+		<!--Navigation-->
+		<nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkolivegreen; py-0 fixed-top">
+			<div class="container">
+				<!-- Logo -->
+				<a class="navbar-brand" href="#">
+					<img src="9.jpg" alt="Suiter.pk Logo" width="100" height="auto" />
+					<b class="custom-color">Suiter.pk</b>
+				</a>
+				
+				
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span><i id="bar" class="fa-solid fa-bars"></i></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="index.html">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="shop.html">Shop</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="blog.html">Blog</a>
+						</li>
+						<li class="nav-item nav-login-link">
+							<a class="nav-link" href="login.html"><i class="fas fa-user mr-1"></i>Login</a>
+						</li>
+						<li class="nav-item nav-logout-link" style="display:none">
+							<a class="nav-link nav-username" href="orders.html" style="color:coral; font-weight:700;"></a>
+						</li>
+						<li class="nav-item nav-logout-link" style="display:none">
+							<a class="nav-link" href="#" onclick="doLogout()" style="color:#fff;">Logout</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#"><i class="fas fa-search"></i></a>
+							<input type="text" id="searchInput" placeholder="Search for products..." />
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-badge">0</span></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		
+
+		<section id="home">
+			<div class="container">
+				<h5>New Arrivals 2024</h5>
+				<h1><span>Best Price</span><br/>This Year</h1>
+				<p>Discover the latest trends in fashion  —  from premium shirts &amp; hoodies to stylish accessories, all at unbeatable prices.</p>
+				<button><a href="shop.html">Shop Now &nbsp;<i class="fas fa-arrow-right"></i></a></button>
+			</div>
+		</section>
+
+		<section id="new">
+			<div class="container text-center mt-5 py-3">
+				<h3>Welcome to Suiters.pk!</h3>
+				<hr class="mx-auto" />
+				<p>"Stay Stylish, Stay You! Shop at Suiters.pk"</p>
+			</div>
+			<div class="row mx-0">
+				<div class="col-lg-4">
+					<img src="intro.jpg" alt="Shirts Collection" />
+					<div class="details">
+						<h2>Shirts</h2>
+						<button><a href="shop.html">Shop Now</a></button>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<img src="pant.jpg" alt="Pants Collection" />
+					<div class="details">
+						<h2>Pants</h2>
+						<button><a href="shop.html">Shop Now</a></button>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<img src="acc.jpg" alt="Accessories Collection" />
+					<div class="details">
+						<h2>Accessories</h2>
+						<button><a href="shop.html">Shop Now</a></button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--Button Down Shirts-->
+		<section id="featured" class="my-5 pb-5">
+			<div class="container text-center mt-4 py-2">
+				<h3>BUTTON DOWN SHIRTS</h3>
+				<hr class="mx-auto" />
+				<p>Stay Glamourous in our OUTFITS!</p>
+			</div>
+			<div class="row mx-auto container-fluid">
+				<div   class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="1.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">White Button Down Shirt</h5>
+					<h4 class="p-price">Rs.2000</h4>
+					<button class="buy-btn"><a href="p1.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="b2.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Light Purple Button Down Shirt</h5>
+					<h4 class="p-price">Rs.2500</h4>
+					<button class="buy-btn"><a href="p2.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="b3.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Light Pink Button Down Shirt</h5>
+					<h4 class="p-price">Rs.2000</h4>
+					<button class="buy-btn"><a href="p3.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="b4.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Yellowish Button Down Shirt</h5>
+					<h4 class="p-price">Rs.1700</h4>
+					<button class="buy-btn"><a href="p4.html">Shop Now</a></button>
+				</div>
+			</div>
+		</section>
+		<section id="reviews" class="my-5">
+			<div class="container text-center mt-4 py-2">
+				<h3>CUSTOMER REVIEWS</h3>
+				<hr class="mx-auto" />
+				<p>Here's what our customers have to say!</p>
+			</div>
+			
+			<div class="row mx-auto container-fluid">
+				<!-- Review 1 -->
+				<div class="review text-center col-lg-4 col-md-6 col-12 py-3">
+					
+					<h5 class="customer-name">Tooba Khan</h5>
+					<div class="star mb-2">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<p class="review-text">"Great quality! The shirt fits perfectly and the fabric is very comfortable."</p>
+				</div>
+		
+				<!-- Review 2 -->
+				<div class="review text-center col-lg-4 col-md-6 col-12 py-3">
+					
+					<h5 class="customer-name">Javeria Ismaeel</h5>
+					<div class="star mb-2">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star-half-alt"></i> <!-- Half star -->
+					</div>
+					<p class="review-text">"Stylish and comfortable. I'll definitely buy more from here!"</p>
+				</div>
+		
+				<!-- Review 3 -->
+				<div class="review text-center col-lg-4 col-md-6 col-12 py-3">
+					<h5 class="customer-name">Ayesha Izhar</h5>
+					<div class="star mb-2">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<p class="review-text">"Fantastic service and the shirt arrived quickly. Love it!"</p>
+				</div>
+			</div>
+		</section>
+		
+		<section id="banner" class="my-5 py-5">
+			<div class="container">
+				<h4>End Season's Sale</h4>
+				<h1>
+					Autumn Collection<br />
+					Up To 20% OFF
+				</h1>
+				<button class="text-uppercase"><a href="shop.html">Shop Now</a></button>
+			</div>
+		</section>
+		<!-- Pants Section-->
+
+		<section id="Clothes" class="my-5">
+			<div class="container text-center mt-5 py-2">
+				<h3>Pants</h3>
+				<hr class="mx-auto" />
+				<p>Where style meets comfort: Discover your New Go-to Pieces.</p>
+			</div>
+			<div class="row mx-auto container-fluid">
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="p5.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Black Bottom Jeans</h5>
+					<h4 class="p-price">Rs.3000</h4>
+					<button class="buy-btn"><a href="p7.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="p2.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Blue Wide Bottom jeans</h5>
+					<h4 class="p-price">Rs.3000</h4>
+					<button class="buy-btn"><a href="p8.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="p3.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Wide legs with Shirt</h5>
+					<h4 class="p-price">Rs.4000</h4>
+					<button class="buy-btn"><a href="p23.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="p4.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Wide Pants</h5>
+					<h4 class="p-price">Rs.2500</h4>
+					<button class="buy-btn"><a href="p9.html">Shop Now</a></button>
+				</div>
+			</div>
+		</section>
+		
+		<!--T-Shirts Section-->
+		<section id="Western" class="my-5">
+			<div class="container text-center mt-3 py-0">
+				<h3>T-SHIRTS</h3>
+				<hr class="mx-auto" />
+				<p>One-of-a-Kind Looks: Unveil Your Unique Style.</p>
+			</div>
+			<div class="row mx-auto container-fluid">
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="s1.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Collar Shirt</h5>
+					<h4 class="p-price">Rs.3300</h4>
+					<button class="buy-btn"><a href="p10.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="s2.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Black Shirt</h5>
+					<h4 class="p-price">Rs.3500</h4>
+					<button class="buy-btn"><a href="p11.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="s3.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Green Sweat Shirt</h5>
+					<h4 class="p-price">Rs.3500</h4>
+					<button class="buy-btn"><a href="p12.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="s4.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Customized Sweat Shirt</h5>
+					<h4 class="p-price">Rs.2500</h4>
+					<button class="buy-btn"><a href="p13.html">Shop Now</a></button>
+				</div>
+			</div>
+		</section>
+		
+		<!-- Hoodies-->
+		<section id="Jumpsuits" class="my-5">
+			<div class="container text-center mt-3 py-0">
+				<h3>Hoodies</h3>
+				<hr class="mx-auto" />
+				<p>One-of-a-Kind Looks: Unveil Your Unique Style.</p>
+			</div>
+			<div class="row mx-auto container-fluid">
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="h1.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Light Brown Hoodie</h5>
+					<h4 class="p-price">Rs.2700</h4>
+					<button class="buy-btn"><a href="p14.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="h2.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Black Shirt</h5>
+					<h4 class="p-price">Rs.1500</h4>
+					<button class="buy-btn"><a href="p15.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="h3.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Black Hoodie</h5>
+					<h4 class="p-price">Rs.3500</h4>
+					<button class="buy-btn"><a href="p15.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="h4.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Green Hoodie</h5>
+					<h4 class="p-price">Rs.5000</h4>
+					<button class="buy-btn"><a href="p20.html">Shop Now</a></button>
+				</div>
+			</div>
+		</section>
+		<section id="banner1" class="my-5 py-5">
+			<div class="container">
+				<h4>End Season's Sale</h4>
+				<h1>
+					Autumn Collection<br />
+					Up To 20% OFF
+				</h1>
+				<button class="text-uppercase"><a href="shop.html">Shop Now</a></button>
+			</div>
+		</section>
+		<section id="Jumpsuits" class="my-5">
+			<div class="container text-center mt-3 py-0">
+				<h3>Accessories</h3>
+				<hr class="mx-auto" />
+				<p>Wear our accessories and gain confidence:)</p>
+			</div>
+			<div class="row mx-auto container-fluid">
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="bag1.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Shoulder Bag</h5>
+					<h4 class="p-price">Rs.3000</h4>
+					<button class="buy-btn"><a href="p18.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="neck.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Double Necklace</h5>
+					<h4 class="p-price">Rs.1500</h4>
+					<button class="buy-btn"><a href="p19.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="scrunch.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Pack of three Scrunchies</h5>
+					<h4 class="p-price">Rs.1000</h4>
+					<button class="buy-btn"><a href="p22.html">Shop Now</a></button>
+				</div>
+				<div class="product text-center col-lg-3 col-md-4 col-12 py-1">
+					<img class="img-fluid mb-3" src="bag.jpg" alt="" />
+					<div class="star">
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+						<i class="fa-solid fa-star"></i>
+					</div>
+					<h5 class="p-name">Black Shoulder Bag</h5>
+					<h4 class="p-price">Rs.5000</h4>
+					<button class="buy-btn"><a href="p24.html">Shop Now</a></button>
+				</div>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="mt-5 py-1">
+			<div class="row container mx-auto pt-5 m-5">
+				<div class="footer-one col-lg-3 col-md-6 col-12">
+					<img src="logoo.png" alt="" height="100px" width="100px" />
+					<p class="pt-3">
+						<br /><b>Suiters.pk </b><br />
+						"Thank you for shopping with us! Stay stylish and connected — follow
+						us on social media for the latest trends, exclusive offers, and
+						more. For any questions, our customer service team is here to help!"
+					</p>
+				</div>
+				<div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
+					<h5 class="pb-2">Featured:</h5>
+					<div class="ft">
+						<ul class="text-uppercase">
+							<li><a href="shop.html">Women</a></li>
+							<li><a href="shop.html">Luxury Pret</a></li>
+							<li><a href="shop.html">Lawn/Cotton/Chiffon</a></li>
+							<li><a href="shop.html">Western</a></li>
+							<li><a href="shop.html">Denims</a></li>
+							<li><a href="shop.html">Bridals</a></li>
+							<li><a href="shop.html">Daily wear</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
+					<h5 class="pb-2">Contact us:</h5>
+					<div>
+						<h6 class="text-uppercase">Phone no:</h6>
+						<p>0324-5531819</p>
+					</div>
+					<div>
+						<h6 class="text-uppercase">Instagram:</h6>
+						<p>Suiters.pk</p>
+					</div>
+					<div>
+						<h6 class="text-uppercase">Email:</h6>
+						<p>suiters.pk@gmail.com</p>
+					</div>
+				</div>
+			
+			</div>
+			<div class="copyright mt-5">
+				<div class="container mx-auto">
+					<div class="row align-items-center">
+						<div class="col-lg-3 col-md-6 col-12 d-flex align-items-center">
+							
+							<p class="mb-0">
+								Suiters.pk eCommerce "2024. All Rights are Reserved.
+							</p>
+						</div>
+						<div class="col-lg-4 col-md-6 col-12 text-lg-left text-center mb-2">
+							<a href="https://www.facebook.com/zainabchaudary.zani/" class="mr-2"
+								><i class="fa-brands fa-square-facebook"></i
+							></a>
+							
+							<a href="https://www.linkedin.com/in/zaynab-rehan-b150552b8/" target="_blank" rel="noopener noreferrer">
+								<i class="fa-brands fa-linkedin"></i>
+							</a>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<!-- JavaScript Libraries -->
+		<script src="cart.js"></script>
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+			integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+			crossorigin="anonymous"
+		></script>
+	</body>
+</html>
+

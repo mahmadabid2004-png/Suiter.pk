@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin  —  Suiters.pk</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e0e0e0;min-height:100vh}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Login */
+#loginGate{display:flex;justify-content:center;align-items:center;min-height:100vh;background:linear-gradient(135deg,#0f1117,#1a1f2e)}
+.login-box{background:#1e2235;border-radius:16px;padding:44px 40px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center;animation:fadeIn .4s ease}
+.login-box .brand{font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:4px}.login-box .brand span{color:#e8532a}
+.login-box .sub{color:#888;font-size:0.82rem;margin-bottom:28px;letter-spacing:.5px}
+.login-box input{width:100%;background:#252b3b;border:1.5px solid #333;border-radius:8px;padding:13px 14px;color:#fff;font-size:0.9rem;margin-bottom:12px;outline:none;transition:border-color .2s}
+.login-box input:focus{border-color:#e8532a}
+.login-box .login-btn{width:100%;background:linear-gradient(135deg,#e8532a,#ff7043);color:#fff;border:none;border-radius:8px;padding:14px;font-size:0.95rem;font-weight:700;cursor:pointer;transition:opacity .2s;margin-top:4px}
+.login-box .login-btn:hover{opacity:.88}
+#loginError{color:#e85555;font-size:0.82rem;margin-top:12px;display:none}
+
+/* Layout */
+#dashboard{display:none}
+.sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;background:#1e2235;padding:24px 18px;overflow-y:auto;z-index:100;display:flex;flex-direction:column;border-right:1px solid #252b3b}
+.sidebar .logo{font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:8px}.sidebar .logo span{color:#e8532a}
+.sidebar .logo small{display:block;font-size:0.65rem;color:#888;font-weight:400;letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.sidebar nav{margin-top:24px;flex:1}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:8px;color:#888;text-decoration:none;font-size:0.87rem;font-weight:600;margin-bottom:3px;transition:all .2s;cursor:pointer}
+.sidebar nav a:hover,.sidebar nav a.active{background:#252b3b;color:#fff}
+.sidebar nav a i{width:18px;text-align:center;color:#e8532a;font-size:0.9rem}
+.sidebar .logout-btn{width:100%;background:rgba(232,83,42,.12);border:1px solid rgba(232,83,42,.35);color:#e8532a;border-radius:8px;padding:10px;font-size:0.84rem;font-weight:700;cursor:pointer;margin-top:16px;transition:.2s}
+.sidebar .logout-btn:hover{background:rgba(232,83,42,.25)}
+
+.main{margin-left:240px;padding:28px 30px;min-height:100vh}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;padding-bottom:16px;border-bottom:1px solid #252b3b}
+.topbar h1{font-size:1.35rem;font-weight:800;color:#fff}
+.topbar .date{color:#666;font-size:0.8rem}
+
+/* Stat cards */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:#1e2235;border-radius:12px;padding:20px;border:1px solid #252b3b;position:relative;overflow:hidden;animation:fadeIn .35s ease}
+.stat-card::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:currentColor;opacity:.05}
+.stat-card .icon{font-size:1.5rem;margin-bottom:12px}
+.stat-card .value{font-size:1.7rem;font-weight:800;color:#fff;margin-bottom:3px;word-break:break-word}
+.stat-card .label{font-size:0.75rem;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.stat-card .change{font-size:0.73rem;margin-top:6px;font-weight:600;color:#888}
+
+/* Panels */
+.panels{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;margin-bottom:22px}
+.panel{background:#1e2235;border-radius:12px;padding:20px;border:1px solid #252b3b;animation:fadeIn .35s ease}
+.panel h3{font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.panel h3 i{color:#e8532a}
+canvas{max-height:230px}
+
+/* Orders panel */
+.orders-panel{background:#1e2235;border-radius:12px;padding:22px;border:1px solid #252b3b;margin-bottom:22px;animation:fadeIn .35s ease}
+.orders-panel h3{font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.orders-panel h3 i{color:#e8532a}
+.orders-toolbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.orders-toolbar h3{margin-bottom:0}
+.toolbar-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.toolbar-actions input{background:#252b3b;border:1.5px solid #333;border-radius:7px;padding:8px 12px;color:#fff;font-size:0.82rem;outline:none;width:220px;transition:border-color .2s}
+.toolbar-actions input:focus{border-color:#e8532a}
+.toolbar-actions select{background:#252b3b;border:1.5px solid #333;border-radius:7px;padding:8px 10px;color:#fff;font-size:0.82rem;outline:none;cursor:pointer}
+.btn-export{background:rgba(33,150,243,.15);border:1px solid rgba(33,150,243,.4);color:#64b5f6;border-radius:7px;padding:8px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:.2s}
+.btn-export:hover{background:rgba(33,150,243,.28)}
+.btn-danger-sm{background:rgba(232,83,42,.12);border:1px solid rgba(232,83,42,.35);color:#e8532a;border-radius:7px;padding:8px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:.2s}
+.btn-danger-sm:hover{background:rgba(232,83,42,.25)}
+
+/* Table */
+.orders-table{width:100%;border-collapse:collapse;font-size:0.81rem}
+.orders-table th{text-align:left;padding:9px 11px;background:#252b3b;color:#888;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:.6px}
+.orders-table th:first-child{border-radius:6px 0 0 6px}.orders-table th:last-child{border-radius:0 6px 6px 0}
+.orders-table td{padding:11px;color:#ddd;border-bottom:1px solid #1a1f2e}
+.orders-table tr:last-child td{border-bottom:none}
+.orders-table tr:hover td{background:rgba(255,255,255,.02)}
+
+/* Badges */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:capitalize}
+.badge.received{background:rgba(33,150,243,.15);color:#64b5f6}
+.badge.processing{background:rgba(255,152,0,.15);color:#ffb74d}
+.badge.delivered{background:rgba(76,175,80,.15);color:#81c784}
+.badge.cancelled{background:rgba(232,83,42,.15);color:#ff8a65}
+.badge.pending_delivery{background:rgba(232,83,42,.12);color:#ff8a65}
+
+/* Row actions */
+.status-sel{background:#252b3b;border:1px solid #333;color:#fff;border-radius:6px;padding:5px 8px;font-size:0.78rem;cursor:pointer;outline:none}
+.btn-view,.btn-del{background:none;border:none;cursor:pointer;padding:4px 7px;border-radius:5px;font-size:0.85rem;transition:.2s}
+.btn-view{color:#64b5f6}.btn-view:hover{background:rgba(33,150,243,.15)}
+.btn-del{color:#e85555}.btn-del:hover{background:rgba(232,83,42,.15)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:flex;justify-content:center;align-items:center;padding:20px}
+.modal-box{background:#1e2235;border-radius:16px;width:100%;max-width:620px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.6);animation:fadeIn .3s ease}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid #252b3b}
+.modal-header h3{font-size:1rem;font-weight:800;color:#fff}
+.modal-body{padding:24px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.modal-grid>div strong{display:block;font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.modal-grid>div p{color:#fff;font-size:0.88rem;font-weight:500}
+
+/* Settings form */
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:0.78rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.s-input{width:100%;background:#252b3b;border:1.5px solid #333;border-radius:8px;padding:11px 13px;color:#fff;font-size:0.88rem;outline:none;transition:border-color .2s}
+.s-input:focus{border-color:#e8532a}
+
+/* Responsive */
+@media(max-width:1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}.panels{grid-template-columns:1fr}}
+@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.sidebar{width:200px}.main{margin-left:200px;padding:18px 14px}}
+@media(max-width:600px){.sidebar{display:none}.main{margin-left:0}.stats-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <div class="sidebar">
+    <div class="logo" style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 20px;">
+      <img src="9.jpg" alt="Suiter.pk Logo" style="width: 80px; height: auto; border-radius: 8px; margin-bottom: 8px;" />
+      <div>Suiters<span>.pk</span><small>Admin Panel</small></div>
+    </div>
+    <nav>
+      <a href="#" class="active" onclick="showSection('overview',this);return false"><i class="fas fa-chart-pie"></i>Overview</a>
+      <a href="#" onclick="showSection('orders',this);return false"><i class="fas fa-box"></i>Manage Orders</a>
+      <a href="#" onclick="showSection('revenue',this);return false"><i class="fas fa-rupee-sign"></i>Revenue</a>
+      <a href="#" onclick="showSection('products',this);return false"><i class="fas fa-tshirt"></i>Products</a>
+      <a href="#" onclick="showSection('customers',this);return false"><i class="fas fa-users"></i>Customers</a>
+      <a href="#" onclick="showSection('settings',this);return false"><i class="fas fa-cog"></i>Settings</a>
+      <hr style="border-color:#252b3b;margin:12px 0"/>
+      <a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i>View Store</a>
+    </nav>
+    <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> &nbsp;Logout</button>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <h1 id="sectionTitle">Overview</h1>
+      <div class="date" id="dateDisplay"></div>
+    </div>
+    <div id="sectionContent"></div>
+  </div>
+</div>
+
+<!-- Firebase SDKs (Realtime Database  —  free, no billing required) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
+

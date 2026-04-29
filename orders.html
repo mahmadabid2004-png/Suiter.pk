@@ -1,369 +1,394 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Orders — Suiters.pk</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" crossorigin="anonymous" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="icon" href="9.jpg" type="image/png" />
-    <style>
-        body { font-family: 'Poppins', sans-serif; background: #f7f5f0; }
-        .cart-badge { background:coral; color:#fff; border-radius:50%; font-size:10px; padding:2px 6px; position:relative; top:-8px; left:-6px; display:none; }
-        .orders-page { padding: 100px 0 60px; }
-        .page-header { margin-bottom: 30px; }
-        .page-header h2 { font-weight: 800; font-size: 2rem; color: #2d2d2d; }
-        .page-header p { color: #888; font-size: 0.9rem; }
-
-        /* Order Card */
-        .order-card {
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 2px 14px rgba(0,0,0,0.07);
-            margin-bottom: 20px;
-            overflow: hidden;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .order-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.12); transform: translateY(-2px); }
-
-        .order-header {
-            background: darkolivegreen;
-            color: #fff;
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .order-id-label { font-size: 0.78rem; opacity: 0.7; }
-        .order-id-val { font-size: 1rem; font-weight: 800; letter-spacing: 1px; color: coral; }
-        .order-date { font-size: 0.8rem; opacity: 0.75; }
-        .order-status {
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .status-received        { background: #e3f2fd; color: #1565c0; }
-        .status-confirmed       { background: #e8f5e9; color: #1b5e20; }
-        .status-shipped         { background: #fff3e0; color: #e65100; }
-        .status-delivered       { background: #f3e5f5; color: #6a1b9a; }
-        .status-awaiting_payment{ background: #fff8e1; color: #f57f17; }
-        .status-cancelled       { background: #fce4ec; color: #880e4f; }
-
-        .order-body { padding: 20px 24px; }
-
-        /* Order items */
-        .order-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f5f5f5;
-        }
-        .order-item:last-child { border-bottom: none; }
-        .order-item img { width: 60px; height: 56px; object-fit: cover; border-radius: 8px; }
-        .order-item-info { flex: 1; }
-        .order-item-info strong { font-size: 0.88rem; font-weight: 700; display: block; }
-        .order-item-info small { color: #888; font-size: 0.78rem; }
-        .order-item-price { font-weight: 700; color: darkolivegreen; font-size: 0.9rem; }
-
-        .order-footer {
-            background: #fafafa;
-            padding: 14px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            border-top: 1px solid #f0f0f0;
-        }
-        .order-meta { font-size: 0.82rem; color: #666; }
-        .order-meta strong { color: darkolivegreen; }
-        .order-total-label { font-size: 0.85rem; font-weight: 800; color: #2d2d2d; }
-        .order-total-val { font-size: 1.1rem; font-weight: 800; color: darkolivegreen; }
-
-        /* Filter bar */
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
-        .filter-btn {
-            padding: 7px 18px;
-            border: 1.5px solid #ddd;
-            border-radius: 20px;
-            background: none;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #666;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .filter-btn.active { background: darkolivegreen; color: #fff; border-color: darkolivegreen; }
-        .filter-btn:hover { border-color: darkolivegreen; }
-
-        /* Empty */
-        .empty-orders { text-align: center; padding: 80px 20px; }
-        .empty-orders i { font-size: 5rem; color: #ddd; margin-bottom: 20px; display: block; }
-        .empty-orders h4 { font-weight: 700; color: #555; margin-bottom: 10px; }
-        .empty-orders a { background: darkolivegreen; color: #fff; padding: 12px 32px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-block; margin-top: 16px; }
-        .empty-orders a:hover { background: #3b5323; color: #fff; text-decoration: none; }
-
-        /* No login */
-        .login-prompt {
-            text-align: center; padding: 80px 20px;
-            background: #fff; border-radius: 14px;
-            box-shadow: 0 2px 14px rgba(0,0,0,0.07);
-        }
-        .login-prompt i { font-size: 4rem; color: coral; margin-bottom: 18px; display: block; }
-        .login-prompt h4 { font-weight: 800; margin-bottom: 10px; }
-        .login-prompt p { color: #888; margin-bottom: 24px; }
-        .login-prompt a { background: darkolivegreen; color: #fff; padding: 12px 36px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-block; }
-        .login-prompt a:hover { background: #3b5323; color: #fff; text-decoration: none; }
-    </style>
-</head>
-<body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkolivegreen; position:fixed; top:0; width:100%; z-index:1000;">
-    <div class="container">
-        <a class="navbar-brand" href="index.html">
-            <img src="9.jpg" alt="Suiter.pk Logo" width="90" height="auto" />
-            <b style="color:#000">Suiter.pk</b>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navOrders">
-            <span><i class="fa-solid fa-bars" style="color:#fff; font-size:1.4rem;"></i></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navOrders">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
-                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                <li class="nav-item nav-login-link"><a class="nav-link" href="login.html"><i class="fas fa-user mr-1"></i>Login</a></li>
-                <li class="nav-item nav-logout-link" style="display:none">
-                    <a class="nav-link nav-username" href="orders.html" style="color:coral; font-weight:700;"></a>
-                </li>
-                <li class="nav-item nav-logout-link" style="display:none">
-                    <a class="nav-link" href="#" onclick="doLogout()">Logout</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-badge">0</span></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="orders-page container" id="ordersMain">
-    <div class="page-header">
-        <h2><i class="fas fa-box-open mr-2" style="color:coral;"></i>My Orders</h2>
-        <p>Track and manage all your Suiters.pk orders</p>
-    </div>
-    <div id="ordersContent"><!-- Loaded by JS --></div>
-</div>
-
-<!-- Footer -->
-<footer class="mt-5 py-1">
-    <div class="row container mx-auto pt-5 m-5">
-        <div class="footer-one col-lg-3 col-md-6 col-12">
-            <img src="logoo.png" alt="" height="100px" width="100px" />
-            <p class="pt-3"><br /><b>Suiters.pk</b><br />"Thank you for shopping with us!"</p>
-        </div>
-        <div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
-            <h5 class="pb-2">Quick Links:</h5>
-            <div class="ft"><ul class="text-uppercase">
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="cart.html">Cart</a></li>
-                <li><a href="checkout.html">Checkout</a></li>
-            </ul></div>
-        </div>
-        <div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
-            <h5 class="pb-2">Contact:</h5>
-            <div><h6 class="text-uppercase">Phone:</h6><p>0324-5531819</p></div>
-            <div><h6 class="text-uppercase">Email:</h6><p>suiters.pk@gmail.com</p></div>
-        </div>
-    </div>
-    <div class="copyright mt-5">
-        <div class="container mx-auto">
-            <p class="mb-0" style="color:#fff; font-size:0.8rem; text-align:center; padding:10px 0;">Suiters.pk eCommerce 2024. All Rights Reserved.</p>
-        </div>
-    </div>
-</footer>
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
-<script src="cart.js"></script>
-
-<script>
-    var allOrders = [];
-    var currentFilter = 'all';
-
-    document.addEventListener('DOMContentLoaded', function () {
-        var user = getCurrentUser();
-        loadOrders(user);
-    });
-
-    function loadOrders(user) {
-        // Always load from localStorage first (works for guests + logged-in users)
-        var localOrders = JSON.parse(localStorage.getItem('sk_orders') || '[]');
-
-        // If logged in and Firestore available, merge with cloud orders
-        if (user && firebaseReady && dbReady) {
-            firebase.firestore().collection('orders')
-                .where('userId', 'in', [user.uid, 'guest'])
-                .orderBy('createdAt', 'desc')
-                .get()
-                .then(function(snap) {
-                    var firestoreOrders = [];
-                    snap.forEach(function(doc) { firestoreOrders.push(doc.data()); });
-                    // Merge: Firestore orders take priority, add any local-only ones
-                    var firestoreIds = firestoreOrders.map(function(o) { return o.orderId; });
-                    var localOnly = localOrders.filter(function(o) { return firestoreIds.indexOf(o.orderId) === -1; });
-                    allOrders = firestoreOrders.concat(localOnly);
-                    renderOrders();
-                })
-                .catch(function() {
-                    allOrders = localOrders;
-                    renderOrders();
-                });
-        } else {
-            // Guest user or Firestore not configured — use localStorage only
-            allOrders = localOrders;
-            renderOrders();
-        }
-    }
-
-    function renderOrders() {
-        var content = document.getElementById('ordersContent');
-        content.innerHTML = '';
-
-        var filtered = currentFilter === 'all'
-            ? allOrders
-            : allOrders.filter(function(o) { return o.status === currentFilter || o.paymentStatus === currentFilter; });
-
-        if (allOrders.length === 0) {
-            var user = getCurrentUser();
-            content.innerHTML =
-                '<div class="empty-orders">' +
-                '  <i class="fas fa-box-open"></i>' +
-                '  <h4>No orders yet</h4>' +
-                '  <p>You haven\'t placed any orders. Start shopping!</p>' +
-                '  <a href="shop.html">Shop Now</a>' +
-                (user ? '' : '<br/><br/><p style="font-size:0.85rem; color:#aaa;"><a href="login.html?redirect=orders.html" style="color:coral; font-weight:600;">Login</a> to sync orders across devices.</p>') +
-                '</div>';
-            return;
-        }
-
-        // Filter bar
-        var filterBar = document.createElement('div');
-        filterBar.className = 'filter-bar';
-        var filters = [
-            { key: 'all', label: 'All Orders (' + allOrders.length + ')' },
-            { key: 'received', label: 'Received' },
-            { key: 'confirmed', label: 'Confirmed' },
-            { key: 'shipped', label: 'Shipped' },
-            { key: 'delivered', label: 'Delivered' },
-        ];
-        filters.forEach(function(f) {
-            var btn = document.createElement('button');
-            btn.className = 'filter-btn' + (currentFilter === f.key ? ' active' : '');
-            btn.textContent = f.label;
-            btn.onclick = (function(key) { return function() { currentFilter = key; renderOrders(); }; })(f.key);
-            filterBar.appendChild(btn);
-        });
-        content.appendChild(filterBar);
-
-        if (filtered.length === 0) {
-            var noRes = document.createElement('p');
-            noRes.style.cssText = 'text-align:center; color:#999; padding:40px;';
-            noRes.textContent = 'No orders in this category.';
-            content.appendChild(noRes);
-            return;
-        }
-
-        filtered.forEach(function(order) {
-            content.appendChild(buildOrderCard(order));
-        });
-    }
-
-    function buildOrderCard(order) {
-        var card = document.createElement('div');
-        card.className = 'order-card';
-
-        var date = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-PK', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : 'N/A';
-
-        var statusClass = 'status-' + (order.status || 'received');
-        var statusLabel = (order.status || 'received').replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
-
-        // If payment pending, show that status
-        if (order.paymentStatus === 'awaiting_payment' && order.status === 'received') {
-            statusClass = 'status-awaiting_payment';
-            statusLabel = 'Awaiting Payment';
-        }
-
-        // Header
-        var header = document.createElement('div');
-        header.className = 'order-header';
-        header.innerHTML =
-            '<div><div class="order-id-label">Order ID</div><div class="order-id-val">#' + (order.orderId || 'N/A') + '</div></div>' +
-            '<div class="order-date"><i class="fas fa-calendar-alt mr-1"></i>' + date + '</div>' +
-            '<span class="order-status ' + statusClass + '">' + statusLabel + '</span>';
-        card.appendChild(header);
-
-        // Items
-        var body = document.createElement('div');
-        body.className = 'order-body';
-
-        var items = order.items || [];
-        items.forEach(function(item) {
-            var row = document.createElement('div');
-            row.className = 'order-item';
-            row.innerHTML =
-                '<img src="' + item.image + '" alt="' + item.name + '" onerror="this.src=\'9.jpg\'" />' +
-                '<div class="order-item-info">' +
-                '  <strong>' + item.name + '</strong>' +
-                '  <small>' + (item.size ? 'Size: ' + item.size + '  ' : '') + 'Qty: ' + item.quantity + '</small>' +
-                '</div>' +
-                '<div class="order-item-price">Rs. ' + (item.price * item.quantity) + '</div>';
-            body.appendChild(row);
-        });
-        card.appendChild(body);
-
-        // Footer
-        var footer = document.createElement('div');
-        footer.className = 'order-footer';
-
-        var meta = document.createElement('div');
-        meta.className = 'order-meta';
-        meta.innerHTML =
-            '<i class="fas fa-map-marker-alt mr-1"></i>' + (order.customer ? order.customer.city : '') + ', ' + (order.customer ? order.customer.province : '') +
-            '<br/><i class="fas fa-credit-card mr-1 mt-1"></i><strong>' + (order.paymentMethod || 'N/A') + '</strong>';
-        footer.appendChild(meta);
-
-        var totalDiv = document.createElement('div');
-        totalDiv.innerHTML =
-            '<div class="order-total-label">Order Total</div>' +
-            '<div class="order-total-val">Rs. ' + (order.total || 0) + '</div>';
-        footer.appendChild(totalDiv);
-
-        card.appendChild(footer);
-        return card;
-    }
-
-    function doLogout() {
-        localStorage.removeItem('sk_user');
-        if (typeof firebase !== 'undefined' && firebaseReady) { firebase.auth().signOut(); }
-        window.location.href = 'index.html';
-    }
-</script>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
-</body>
-</html>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Orders  —  Suiters.pk</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="icon" href="9.jpg" type="image/png" />
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f7f5f0; }
+        .cart-badge { background:coral; color:#fff; border-radius:50%; font-size:10px; padding:2px 6px; position:relative; top:-8px; left:-6px; display:none; }
+        .orders-page { padding: 100px 0 60px; }
+        .page-header { margin-bottom: 30px; }
+        .page-header h2 { font-weight: 800; font-size: 2rem; color: #2d2d2d; }
+        .page-header p { color: #888; font-size: 0.9rem; }
+
+        /* Order Card */
+        .order-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .order-card:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.12); transform: translateY(-2px); }
+
+        .order-header {
+            background: darkolivegreen;
+            color: #fff;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .order-id-label { font-size: 0.78rem; opacity: 0.7; }
+        .order-id-val { font-size: 1rem; font-weight: 800; letter-spacing: 1px; color: coral; }
+        .order-date { font-size: 0.8rem; opacity: 0.75; }
+        .order-status {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-received        { background: #e3f2fd; color: #1565c0; }
+        .status-confirmed       { background: #e8f5e9; color: #1b5e20; }
+        .status-shipped         { background: #fff3e0; color: #e65100; }
+        .status-delivered       { background: #f3e5f5; color: #6a1b9a; }
+        .status-awaiting_payment{ background: #fff8e1; color: #f57f17; }
+        .status-cancelled       { background: #fce4ec; color: #880e4f; }
+
+        .order-body { padding: 20px 24px; }
+
+        /* Order items */
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .order-item:last-child { border-bottom: none; }
+        .order-item img { width: 60px; height: 56px; object-fit: cover; border-radius: 8px; }
+        .order-item-info { flex: 1; }
+        .order-item-info strong { font-size: 0.88rem; font-weight: 700; display: block; }
+        .order-item-info small { color: #888; font-size: 0.78rem; }
+        .order-item-price { font-weight: 700; color: darkolivegreen; font-size: 0.9rem; }
+
+        .order-footer {
+            background: #fafafa;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .order-meta { font-size: 0.82rem; color: #666; }
+        .order-meta strong { color: darkolivegreen; }
+        .order-total-label { font-size: 0.85rem; font-weight: 800; color: #2d2d2d; }
+        .order-total-val { font-size: 1.1rem; font-weight: 800; color: darkolivegreen; }
+
+        /* Filter bar */
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 7px 18px;
+            border: 1.5px solid #ddd;
+            border-radius: 20px;
+            background: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .filter-btn.active { background: darkolivegreen; color: #fff; border-color: darkolivegreen; }
+        .filter-btn:hover { border-color: darkolivegreen; }
+
+        /* Empty */
+        .empty-orders { text-align: center; padding: 80px 20px; }
+        .empty-orders i { font-size: 5rem; color: #ddd; margin-bottom: 20px; display: block; }
+        .empty-orders h4 { font-weight: 700; color: #555; margin-bottom: 10px; }
+        .empty-orders a { background: darkolivegreen; color: #fff; padding: 12px 32px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-block; margin-top: 16px; }
+        .empty-orders a:hover { background: #3b5323; color: #fff; text-decoration: none; }
+
+        /* No login */
+        .login-prompt {
+            text-align: center; padding: 80px 20px;
+            background: #fff; border-radius: 14px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+        }
+        .login-prompt i { font-size: 4rem; color: coral; margin-bottom: 18px; display: block; }
+        .login-prompt h4 { font-weight: 800; margin-bottom: 10px; }
+        .login-prompt p { color: #888; margin-bottom: 24px; }
+        .login-prompt a { background: darkolivegreen; color: #fff; padding: 12px 36px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-block; }
+        .login-prompt a:hover { background: #3b5323; color: #fff; text-decoration: none; }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkolivegreen; position:fixed; top:0; width:100%; z-index:1000;">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="9.jpg" alt="Suiter.pk Logo" width="90" height="auto" />
+            <b style="color:#000">Suiter.pk</b>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navOrders">
+            <span><i class="fa-solid fa-bars" style="color:#fff; font-size:1.4rem;"></i></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navOrders">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+                <li class="nav-item nav-login-link"><a class="nav-link" href="login.html"><i class="fas fa-user mr-1"></i>Login</a></li>
+                <li class="nav-item nav-logout-link" style="display:none">
+                    <a class="nav-link nav-username" href="orders.html" style="color:coral; font-weight:700;"></a>
+                </li>
+                <li class="nav-item nav-logout-link" style="display:none">
+                    <a class="nav-link" href="#" onclick="doLogout()">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-badge">0</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="orders-page container" id="ordersMain">
+    <div class="page-header">
+        <h2><i class="fas fa-box-open mr-2" style="color:coral;"></i>My Orders</h2>
+        <p>Track and manage all your Suiters.pk orders</p>
+    </div>
+    <div id="ordersContent"><!-- Loaded by JS --></div>
+</div>
+
+<!-- Footer -->
+<footer class="mt-5 py-1">
+    <div class="row container mx-auto pt-5 m-5">
+        <div class="footer-one col-lg-3 col-md-6 col-12">
+            <img src="logoo.png" alt="" height="100px" width="100px" />
+            <p class="pt-3"><br /><b>Suiters.pk</b><br />"Thank you for shopping with us!"</p>
+        </div>
+        <div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
+            <h5 class="pb-2">Quick Links:</h5>
+            <div class="ft"><ul class="text-uppercase">
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="checkout.html">Checkout</a></li>
+            </ul></div>
+        </div>
+        <div class="footer-one col-lg-3 col-md-6 col-12 mb-3">
+            <h5 class="pb-2">Contact:</h5>
+            <div><h6 class="text-uppercase">Phone:</h6><p>0324-5531819</p></div>
+            <div><h6 class="text-uppercase">Email:</h6><p>suiters.pk@gmail.com</p></div>
+        </div>
+    </div>
+    <div class="copyright mt-5">
+        <div class="container mx-auto">
+            <p class="mb-0" style="color:#fff; font-size:0.8rem; text-align:center; padding:10px 0;">Suiters.pk eCommerce 2024. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="cart.js"></script>
+
+<script>
+    var allOrders = [];
+    var currentFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var user = getCurrentUser();
+        loadOrders(user);
+    });
+
+    function loadOrders(user) {
+        // Always load from localStorage first (works for guests + logged-in users)
+        var localOrders = JSON.parse(localStorage.getItem('sk_orders') || '[]');
+
+        // If logged in and Firebase available, merge with cloud orders
+        if (user && firebaseReady && dbReady) {
+            firebase.database().ref('orders').orderByChild('userId').equalTo(user.uid).once('value')
+                .then(function(snap) {
+                    var cloudOrders = [];
+                    snap.forEach(function(childSnap) { cloudOrders.push(childSnap.val()); });
+                    // Merge: Cloud orders take priority, add any local-only ones
+                    var cloudIds = cloudOrders.map(function(o) { return o.orderId; });
+                    var localOnly = localOrders.filter(function(o) { return cloudIds.indexOf(o.orderId) === -1; });
+                    allOrders = cloudOrders.concat(localOnly);
+                    // Sort descending
+                    allOrders.sort(function(a,b){ return new Date(b.createdAt||0) - new Date(a.createdAt||0); });
+                    renderOrders();
+                })
+                .catch(function(e) {
+                    console.warn('[Suiters.pk] Realtime DB fetch failed:', e);
+                    allOrders = localOrders;
+                    renderOrders();
+                });
+        } else {
+            // Guest user or Firestore not configured  —  use localStorage only
+            allOrders = localOrders;
+            renderOrders();
+        }
+    }
+
+    function renderOrders() {
+        var content = document.getElementById('ordersContent');
+        content.innerHTML = '';
+
+        var filtered = currentFilter === 'all'
+            ? allOrders
+            : allOrders.filter(function(o) { return o.status === currentFilter || o.paymentStatus === currentFilter; });
+
+        if (allOrders.length === 0) {
+            var user = getCurrentUser();
+            content.innerHTML =
+                '<div class="empty-orders">' +
+                '  <i class="fas fa-box-open"></i>' +
+                '  <h4>No orders yet</h4>' +
+                '  <p>You haven\'t placed any orders. Start shopping!</p>' +
+                '  <a href="shop.html">Shop Now</a>' +
+                (user ? '' : '<br/><br/><p style="font-size:0.85rem; color:#aaa;"><a href="login.html?redirect=orders.html" style="color:coral; font-weight:600;">Login</a> to sync orders across devices.</p>') +
+                '</div>';
+            return;
+        }
+
+        // Filter bar
+        var filterBar = document.createElement('div');
+        filterBar.className = 'filter-bar';
+        var filters = [
+            { key: 'all', label: 'All Orders (' + allOrders.length + ')' },
+            { key: 'received', label: 'Received' },
+            { key: 'confirmed', label: 'Confirmed' },
+            { key: 'shipped', label: 'Shipped' },
+            { key: 'delivered', label: 'Delivered' },
+        ];
+        filters.forEach(function(f) {
+            var btn = document.createElement('button');
+            btn.className = 'filter-btn' + (currentFilter === f.key ? ' active' : '');
+            btn.textContent = f.label;
+            btn.onclick = (function(key) { return function() { currentFilter = key; renderOrders(); }; })(f.key);
+            filterBar.appendChild(btn);
+        });
+        content.appendChild(filterBar);
+
+        if (filtered.length === 0) {
+            var noRes = document.createElement('p');
+            noRes.style.cssText = 'text-align:center; color:#999; padding:40px;';
+            noRes.textContent = 'No orders in this category.';
+            content.appendChild(noRes);
+            return;
+        }
+
+        filtered.forEach(function(order) {
+            content.appendChild(buildOrderCard(order));
+        });
+    }
+
+    function buildOrderCard(order) {
+        var card = document.createElement('div');
+        card.className = 'order-card';
+
+        var date = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-PK', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : 'N/A';
+
+        var statusClass = 'status-' + (order.status || 'received');
+        var statusLabel = (order.status || 'received').replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+
+        // If payment pending, show that status
+        if (order.paymentStatus === 'awaiting_payment' && order.status === 'received') {
+            statusClass = 'status-awaiting_payment';
+            statusLabel = 'Awaiting Payment';
+        }
+
+        // Header
+        var header = document.createElement('div');
+        header.className = 'order-header';
+        header.innerHTML =
+            '<div><div class="order-id-label">Order ID</div><div class="order-id-val">#' + (order.orderId || 'N/A') + '</div></div>' +
+            '<div class="order-date"><i class="fas fa-calendar-alt mr-1"></i>' + date + '</div>' +
+            '<span class="order-status ' + statusClass + '">' + statusLabel + '</span>';
+        card.appendChild(header);
+
+        // â”€â”€ Payment Pending Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        if (order.paymentStatus === 'awaiting_payment' && order.status !== 'cancelled') {
+            var waMsg = encodeURIComponent(
+                'Hi! I placed order #' + order.orderId + ' on Suiters.pk.\n' +
+                'Total: Rs. ' + order.total + ' via ' + order.paymentMethod + '.\n' +
+                'Please find my payment screenshot attached. Kindly confirm my order.'
+            );
+            var banner = document.createElement('div');
+            banner.style.cssText = 'background:linear-gradient(135deg,#fff8e1,#fff3cd);border-left:4px solid #ff9800;padding:14px 20px;';
+            banner.innerHTML =
+                '<div style="display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;">' +
+                '<span style="font-size:1.3rem;">âš ï¸</span>' +
+                '<div style="flex:1">' +
+                  '<strong style="color:#e65100;font-size:0.88rem;">Payment Pending</strong>' +
+                  '<p style="margin:4px 0 10px;font-size:0.82rem;color:#795548;">Please send your payment via <strong>' + order.paymentMethod + '</strong> to the number shown at checkout to confirm this order.</p>' +
+                  '<a href="https://wa.me/923245531819?text=' + waMsg + '" target="_blank" rel="noopener" ' +
+                     'style="display:inline-flex;align-items:center;gap:7px;background:#25d366;color:#fff;padding:9px 20px;border-radius:20px;text-decoration:none;font-weight:700;font-size:0.82rem;">' +
+                     '<i class="fab fa-whatsapp"></i> Send Payment Proof on WhatsApp' +
+                  '</a>' +
+                '</div>' +
+                '</div>';
+            card.appendChild(banner);
+        }
+
+        // Items
+        var body = document.createElement('div');
+        body.className = 'order-body';
+
+        var items = order.items || [];
+        items.forEach(function(item) {
+            var row = document.createElement('div');
+            row.className = 'order-item';
+            row.innerHTML =
+                '<img src="' + item.image + '" alt="' + item.name + '" onerror="this.src=\'9.jpg\'" />' +
+                '<div class="order-item-info">' +
+                '  <strong>' + item.name + '</strong>' +
+                '  <small>' + (item.size ? 'Size: ' + item.size + '  ' : '') + 'Qty: ' + item.quantity + '</small>' +
+                '</div>' +
+                '<div class="order-item-price">Rs. ' + (item.price * item.quantity) + '</div>';
+            body.appendChild(row);
+        });
+        card.appendChild(body);
+
+        // Footer
+        var footer = document.createElement('div');
+        footer.className = 'order-footer';
+
+        var meta = document.createElement('div');
+        meta.className = 'order-meta';
+        meta.innerHTML =
+            '<i class="fas fa-map-marker-alt mr-1"></i>' + (order.customer ? order.customer.city : '') + ', ' + (order.customer ? order.customer.province : '') +
+            '<br/><i class="fas fa-credit-card mr-1 mt-1"></i><strong>' + (order.paymentMethod || 'N/A') + '</strong>';
+        footer.appendChild(meta);
+
+        var totalDiv = document.createElement('div');
+        totalDiv.innerHTML =
+            '<div class="order-total-label">Order Total</div>' +
+            '<div class="order-total-val">Rs. ' + (order.total || 0) + '</div>';
+        footer.appendChild(totalDiv);
+
+        card.appendChild(footer);
+        return card;
+    }
+
+    function doLogout() {
+        localStorage.removeItem('sk_user');
+        if (typeof firebase !== 'undefined' && firebaseReady) { firebase.auth().signOut(); }
+        window.location.href = 'index.html';
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
+
